@@ -1,0 +1,46 @@
+#!/usr/bin/php
+<?php
+	chdir(dirname(__FILE__));
+
+	define('PID_FILE', dirname(__FILE__) . '/runtime/backServer.pid');	
+	
+	
+	if($argc == 1) {
+		startUp();
+	}elseif($argc == 2) {
+		$c = $argv[1];
+		if($c == 'stop') {
+			stop();
+		}elseif ($c == 'start') {
+			startUp();
+		}elseif ($c == 'restart') {
+			stop();
+			startUp();
+		}else {
+			echo "Error Command!\n";
+		}
+	} else{
+		echo "Too many worlds!";
+	}
+	
+	exit(0);
+	
+	function startUp(){
+		if(file_exists(PID_FILE)) {
+			$pid = file_get_contents(PID_FILE);
+			echo "Process has been running at ${pid} \n";
+			exit(0);
+		}
+		echo "starting bscc!\n";
+		include 'core/main.php';
+	}
+	
+	function stop(){
+	    echo "stopping bscc!\n";
+		$pid = file_get_contents(PID_FILE);
+		posix_kill($pid, 9);
+		unlink(PID_FILE);
+	}
+
+	
+	

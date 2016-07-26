@@ -1,5 +1,15 @@
 <?php 
 
+function get_fun_src($fun){
+	$cf = new ReflectionFunction($fun);
+	return $cf->getFileName();
+}
+
+function get_obj_src($class){
+	$cf = new ReflectionClass($class);
+	return $cf->getFileName();
+}
+
 function ubt(){
 	$str = "";
 	$backTrace = debug_backtrace();
